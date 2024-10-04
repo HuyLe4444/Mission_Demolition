@@ -25,20 +25,37 @@ public class MissionDemolition : MonoBehaviour {
     [Header("Dynamic")]
     public int level; //The current level
     public int levelMax; //The number of levels
-    public int shotsTaken = 3;
+    public int shotsTaken;
     public GameObject castle; //The current castle
     public GameMode mode = GameMode.idle;
+    public Difficulty currentDifficulty;
 
+    public enum Difficulty
+    {
+        Easy,
+        Normal,
+        Hard
+    }
     void Start()
     {
         S = this; //Define the Singleton
 
-        if (PlayerPrefs.GetInt("HardMode", 0) == 1) {
-            shotsTaken = 1;
-        } else if (PlayerPrefs.GetInt("NorMode", 0) == 1) {
-            shotsTaken = 3;
-        } else {
-            shotsTaken = 5;
+        // Get the difficulty setting
+        int difficultyValue = PlayerPrefs.GetInt("Difficulty", 1); // Default to Normal
+        currentDifficulty = (Difficulty)difficultyValue;
+
+        // Set shots based on difficulty
+        switch (currentDifficulty)
+        {
+            case Difficulty.Easy:
+                shotsTaken = 5;
+                break;
+            case Difficulty.Normal:
+                shotsTaken = 3;
+                break;
+            case Difficulty.Hard:
+                shotsTaken = 1;
+                break;
         }
 
         Goal.goalMet = false;
